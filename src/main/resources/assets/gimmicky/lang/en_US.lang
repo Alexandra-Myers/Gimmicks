@@ -1,0 +1,2 @@
+commands.gimmick.retrieve=The gimmick for %s is %s.
+commands.gimmick.success=Successfully updated gimmick for %s.

@@ -1,7 +1,4 @@
-package com.myname.mymodid;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+package net.atlas.gimmicky;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -9,20 +6,34 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import net.atlas.gimmicky.gimmick.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Mod(modid = MyMod.MODID, version = Tags.VERSION, name = "MyMod", acceptedMinecraftVersions = "[1.7.10]")
-public class MyMod {
+import java.util.*;
 
-    public static final String MODID = "mymodid";
+@Mod(modid = Gimmicky.MODID, version = Tags.VERSION, name = "Gimmicky", acceptedMinecraftVersions = "[1.7.10]")
+public class Gimmicky {
+    public static final Map<String, Gimmick> gimmicks = new HashMap<>();
+    public static final String MODID = "gimmicky";
+    public static final String GIMMICK_TAG_NAME = "PlayerGimmick";
     public static final Logger LOG = LogManager.getLogger(MODID);
 
-    @SidedProxy(clientSide = "com.myname.mymodid.ClientProxy", serverSide = "com.myname.mymodid.CommonProxy")
+    @SidedProxy(clientSide = "net.atlas.gimmicky.ClientProxy", serverSide = "net.atlas.gimmicky.CommonProxy")
     public static CommonProxy proxy;
 
     @Mod.EventHandler
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
+        gimmicks.put("nothing", new NothingGimmick());
+        gimmicks.put("explodeOnDeath", new ExplosionOnDeathGimmick());
+        gimmicks.put("teleportRandomlyOnHurt", new TeleportRandomlyOnHurtGimmick());
+        gimmicks.put("stepHeightBoost", new StepHeightGimmick());
+        for (String s : Config.blacklistedEffects) {
+            if (s.equals("nothing")) continue;
+            gimmicks.remove(s);
+        }
         proxy.preInit(event);
     }
 
@@ -42,5 +53,9 @@ public class MyMod {
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
+    }
+    public static String getRandomGimmick(Random random) {
+        List<String> gimmickNames = new ArrayList<>(gimmicks.keySet());
+        return gimmickNames.get(random.nextInt(gimmickNames.size()));
     }
 }

@@ -1,4 +1,4 @@
-package com.myname.mymodid;
+package net.atlas.gimmicky;
 
 public class ClientProxy extends CommonProxy {
 
