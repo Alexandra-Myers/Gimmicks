@@ -21,9 +21,21 @@ public class ModEventBusHandler {
         IExtendedEntityProperties gimmickProperties = player.getExtendedProperties("gimmicky:gimmick");
         if (!(gimmickProperties instanceof GimmickExtendedEntityProperty)) return;
         GimmickExtendedEntityProperty gimmickExtendedEntityProperty = (GimmickExtendedEntityProperty) gimmickProperties;
-        if (Config.persistGimmickAcrossDeath && !"nothing".equalsIgnoreCase(gimmickExtendedEntityProperty.getGimmickName())) return;
+        if (Config.persistGimmickAcrossDeath && !"nothing".equalsIgnoreCase(gimmickExtendedEntityProperty.getGimmickName())) {
+            gimmickExtendedEntityProperty.finaliseOldGimmick(event);
+            Gimmick gimmick = gimmickExtendedEntityProperty.getGimmick();
+            if (gimmick != null && gimmick.appliesOnEvent(event)) gimmick.handleEvent(event);
+            return;
+        }
         gimmickExtendedEntityProperty.setGimmick(getRandomGimmick(gimmickExtendedEntityProperty.getRandom()));
         Gimmicky.proxy.simpleNetworkWrapper.sendToAll(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName(), player.getEntityId()));
+        gimmickExtendedEntityProperty.finaliseOldGimmick(event);
+        Gimmick gimmick = gimmickExtendedEntityProperty.getGimmick();
+        if (gimmick != null && gimmick.appliesOnEvent(event)) gimmick.handleEvent(event);
+    }
+    @SubscribeEvent
+    public void handleItemCrafted(PlayerEvent.ItemCraftedEvent event) {
+        handlePlayerEvent(event);
     }
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -41,5 +53,12 @@ public class ModEventBusHandler {
         if (!(gimmickProperties instanceof GimmickExtendedEntityProperty)) return;
         GimmickExtendedEntityProperty gimmickExtendedEntityProperty = (GimmickExtendedEntityProperty) gimmickProperties;
         Gimmicky.proxy.simpleNetworkWrapper.sendToAll(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName(), player.getEntityId()));
+    }
+    public void handlePlayerEvent(PlayerEvent event) {
+        IExtendedEntityProperties gimmickProperties = event.player.getExtendedProperties("gimmicky:gimmick");
+        if (!(gimmickProperties instanceof GimmickExtendedEntityProperty)) return;
+        ((GimmickExtendedEntityProperty) gimmickProperties).finaliseOldGimmick(event);
+        Gimmick gimmick = ((GimmickExtendedEntityProperty) gimmickProperties).getGimmick();
+        if (gimmick != null && gimmick.appliesOnEvent(event)) gimmick.handleEvent(event);
     }
 }

@@ -30,6 +30,8 @@ public class Gimmicky {
         gimmicks.put("explodeOnDeath", new ExplosionOnDeathGimmick());
         gimmicks.put("teleportRandomlyOnHurt", new TeleportRandomlyOnHurtGimmick());
         gimmicks.put("stepHeightBoost", new StepHeightGimmick());
+        gimmicks.put("dupeCraftedItem", new RandomDupeGimmick());
+        gimmicks.put("glassCannon", new GlassCannonGimmick());
         for (String s : Config.blacklistedEffects) {
             if (s.equals("nothing")) continue;
             gimmicks.remove(s);
