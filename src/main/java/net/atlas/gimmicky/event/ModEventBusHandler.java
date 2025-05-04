@@ -23,12 +23,13 @@ public class ModEventBusHandler {
         GimmickExtendedEntityProperty gimmickExtendedEntityProperty = (GimmickExtendedEntityProperty) gimmickProperties;
         if (Config.persistGimmickAcrossDeath && !"nothing".equalsIgnoreCase(gimmickExtendedEntityProperty.getGimmickName())) return;
         gimmickExtendedEntityProperty.setGimmick(getRandomGimmick(gimmickExtendedEntityProperty.getRandom()));
-        if (player instanceof EntityPlayerMP) Gimmicky.proxy.simpleNetworkWrapper.sendTo(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName()), (EntityPlayerMP) player);
+        Gimmicky.proxy.simpleNetworkWrapper.sendToAll(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName(), player.getEntityId()));
     }
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         IExtendedEntityProperties gimmickProperties = event.player.getExtendedProperties("gimmicky:gimmick");
         if (!(gimmickProperties instanceof GimmickExtendedEntityProperty)) return;
+        ((GimmickExtendedEntityProperty) gimmickProperties).finaliseOldGimmick(event);
         Gimmick gimmick = ((GimmickExtendedEntityProperty) gimmickProperties).getGimmick();
         if (gimmick != null && gimmick.appliesOnEvent(event)) gimmick.handleEvent(event);
     }
@@ -39,6 +40,6 @@ public class ModEventBusHandler {
         IExtendedEntityProperties gimmickProperties = player.getExtendedProperties("gimmicky:gimmick");
         if (!(gimmickProperties instanceof GimmickExtendedEntityProperty)) return;
         GimmickExtendedEntityProperty gimmickExtendedEntityProperty = (GimmickExtendedEntityProperty) gimmickProperties;
-        Gimmicky.proxy.simpleNetworkWrapper.sendTo(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName()), player);
+        Gimmicky.proxy.simpleNetworkWrapper.sendToAll(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName(), player.getEntityId()));
     }
 }

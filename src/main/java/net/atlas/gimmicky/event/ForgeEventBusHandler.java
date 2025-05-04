@@ -33,6 +33,7 @@ public class ForgeEventBusHandler {
         if (!(event.entity instanceof EntityPlayer)) return;
         IExtendedEntityProperties gimmickProperties = event.entity.getExtendedProperties("gimmicky:gimmick");
         if (!(gimmickProperties instanceof GimmickExtendedEntityProperty)) return;
+        ((GimmickExtendedEntityProperty) gimmickProperties).finaliseOldGimmick(event);
         Gimmick gimmick = ((GimmickExtendedEntityProperty) gimmickProperties).getGimmick();
         if (gimmick != null && gimmick.appliesOnEvent(event)) gimmick.handleEvent(event);
     }

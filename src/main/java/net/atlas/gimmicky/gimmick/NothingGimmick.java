@@ -12,4 +12,9 @@ public class NothingGimmick implements Gimmick {
     public void handleEvent(Event event) {
 
     }
+
+    @Override
+    public void finaliseEvent(Event event) {
+
+    }
 }

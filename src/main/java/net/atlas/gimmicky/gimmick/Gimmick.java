@@ -5,4 +5,5 @@ import cpw.mods.fml.common.eventhandler.Event;
 public interface Gimmick {
     boolean appliesOnEvent(Event event);
     void handleEvent(Event event);
+    void finaliseEvent(Event event);
 }

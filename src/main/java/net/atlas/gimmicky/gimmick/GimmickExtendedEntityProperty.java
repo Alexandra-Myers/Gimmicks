@@ -1,5 +1,6 @@
 package net.atlas.gimmicky.gimmick;
 
+import cpw.mods.fml.common.eventhandler.Event;
 import net.atlas.gimmicky.Gimmicky;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,14 +14,17 @@ import static net.atlas.gimmicky.Gimmicky.*;
 public class GimmickExtendedEntityProperty implements IExtendedEntityProperties {
     private Random random;
     private String gimmick;
+    private String oldGimmick = null;
     @Override
     public void saveNBTData(NBTTagCompound compound) {
+        if (oldGimmick != null) compound.setString(Gimmicky.GIMMICK_TAG_NAME + "O", oldGimmick);
         if (!gimmick.isEmpty()) compound.setString(Gimmicky.GIMMICK_TAG_NAME, gimmick);
         else if (compound.hasKey(Gimmicky.GIMMICK_TAG_NAME)) compound.removeTag(GIMMICK_TAG_NAME);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
+        if (compound.hasKey(Gimmicky.GIMMICK_TAG_NAME + "O")) oldGimmick = compound.getString(Gimmicky.GIMMICK_TAG_NAME + "O");
         if (!compound.hasKey(Gimmicky.GIMMICK_TAG_NAME)) {
             gimmick = getRandomGimmick(random);
             return;
@@ -42,7 +46,17 @@ public class GimmickExtendedEntityProperty implements IExtendedEntityProperties 
     }
 
     public void setGimmick(String gimmick) {
+        this.oldGimmick = this.gimmick;
         this.gimmick = gimmick;
+    }
+
+    public void finaliseOldGimmick(Event event) {
+        if (oldGimmick == null) return;
+        Gimmick gimmick = gimmicks.get(oldGimmick);
+        if (gimmick.appliesOnEvent(event)) {
+            gimmick.finaliseEvent(event);
+            oldGimmick = null;
+        }
     }
 
     public Gimmick getGimmick() {
