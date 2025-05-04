@@ -19,7 +19,7 @@ public class ExplosionOnDeathGimmick implements Gimmick {
             livingDeathEvent.entityLiving.posX,
             livingDeathEvent.entityLiving.posY,
             livingDeathEvent.entityLiving.posZ,
-            2.0F,
+            3.0F,
             false);
     }
 }
