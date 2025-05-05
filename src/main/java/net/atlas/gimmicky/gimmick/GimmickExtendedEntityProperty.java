@@ -3,6 +3,7 @@ package net.atlas.gimmicky.gimmick;
 import cpw.mods.fml.common.eventhandler.Event;
 import net.atlas.gimmicky.Gimmicky;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
@@ -15,25 +16,46 @@ public class GimmickExtendedEntityProperty implements IExtendedEntityProperties 
     private Random random;
     private String gimmick;
     private String oldGimmick = null;
+    private boolean isDirty = false;
     @Override
     public void saveNBTData(NBTTagCompound compound) {
-        if (oldGimmick != null) compound.setString(Gimmicky.GIMMICK_TAG_NAME + "O", oldGimmick);
-        if (!gimmick.isEmpty()) compound.setString(Gimmicky.GIMMICK_TAG_NAME, gimmick);
-        else if (compound.hasKey(Gimmicky.GIMMICK_TAG_NAME)) compound.removeTag(GIMMICK_TAG_NAME);
+        NBTTagCompound customData = compound.getCompoundTag("ForgeData");
+        if (customData == null) customData = new NBTTagCompound();
+        saveToCustomData(customData);
+        compound.setTag("ForgeData", customData);
+    }
+
+    public void saveToCustomData(NBTTagCompound customData) {
+        NBTTagCompound persistedTagCompound = customData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+        if (persistedTagCompound == null) persistedTagCompound = new NBTTagCompound();
+        if (oldGimmick != null) persistedTagCompound.setString(Gimmicky.GIMMICK_TAG_NAME + "O", oldGimmick);
+        if (!gimmick.isEmpty()) persistedTagCompound.setString(Gimmicky.GIMMICK_TAG_NAME, gimmick);
+        else if (persistedTagCompound.hasKey(Gimmicky.GIMMICK_TAG_NAME)) persistedTagCompound.removeTag(GIMMICK_TAG_NAME);
+        customData.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistedTagCompound);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
-        if (compound.hasKey(Gimmicky.GIMMICK_TAG_NAME + "O")) oldGimmick = compound.getString(Gimmicky.GIMMICK_TAG_NAME + "O");
-        if (!compound.hasKey(Gimmicky.GIMMICK_TAG_NAME)) {
+        NBTTagCompound customData = compound.getCompoundTag("ForgeData");
+        if (customData == null) customData = new NBTTagCompound();
+        loadFromCustomData(customData);
+    }
+
+    public void loadFromCustomData(NBTTagCompound customData) {
+        NBTTagCompound persistedTagCompound = customData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+        if (persistedTagCompound == null) persistedTagCompound = new NBTTagCompound();
+        if (persistedTagCompound.hasKey(Gimmicky.GIMMICK_TAG_NAME + "O")) oldGimmick = persistedTagCompound.getString(Gimmicky.GIMMICK_TAG_NAME + "O");
+        if (!persistedTagCompound.hasKey(Gimmicky.GIMMICK_TAG_NAME)) {
             gimmick = getRandomGimmick(random);
+            isDirty = true;
             return;
-        } else if (!gimmicks.containsKey(compound.getString(Gimmicky.GIMMICK_TAG_NAME))) {
-            compound.removeTag(Gimmicky.GIMMICK_TAG_NAME);
+        } else if (!gimmicks.containsKey(persistedTagCompound.getString(Gimmicky.GIMMICK_TAG_NAME))) {
+            persistedTagCompound.removeTag(Gimmicky.GIMMICK_TAG_NAME);
             gimmick = getRandomGimmick(random);
+            isDirty = true;
             return;
         }
-        gimmick = compound.getString(Gimmicky.GIMMICK_TAG_NAME);
+        gimmick = persistedTagCompound.getString(Gimmicky.GIMMICK_TAG_NAME);
     }
 
     @Override
@@ -48,6 +70,10 @@ public class GimmickExtendedEntityProperty implements IExtendedEntityProperties 
     public void setGimmick(String gimmick) {
         this.oldGimmick = this.gimmick;
         this.gimmick = gimmick;
+    }
+
+    public boolean isDirty() {
+        return isDirty;
     }
 
     public void finaliseOldGimmick(Event event) {

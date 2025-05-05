@@ -4,8 +4,11 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.atlas.gimmicky.gimmick.Gimmick;
 import net.atlas.gimmicky.gimmick.GimmickExtendedEntityProperty;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.MinecraftForge;
@@ -13,6 +16,8 @@ import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 
 public class ForgeEventBusHandler {
     @SubscribeEvent
@@ -28,6 +33,21 @@ public class ForgeEventBusHandler {
     @SubscribeEvent
     public void handleLivingHurt(LivingHurtEvent event) {
         handleEntityEvent(event);
+    }
+    @SubscribeEvent
+    public void handleItemUse(PlayerInteractEvent event) {
+        ItemStack itemStackIn = event.entityPlayer.inventory.getCurrentItem();
+        if (!event.action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) && itemStackIn != null && itemStackIn.getItem() instanceof ItemArmor) {
+            int i = EntityLiving.getArmorPosition(itemStackIn) - 1;
+            ItemStack itemstack1 = event.entityPlayer.getCurrentArmor(i);
+
+            if (itemstack1 != null) {
+                event.entityPlayer.setCurrentItemOrArmor(i + 1, itemStackIn.copy());
+                event.entityPlayer.setCurrentItemOrArmor(0, itemstack1.copy());
+                itemStackIn.stackSize = 0;
+                itemstack1.stackSize = 0;
+            }
+        }
     }
     public void handleEntityEvent(EntityEvent event) {
         if (!(event.entity instanceof EntityPlayer)) return;

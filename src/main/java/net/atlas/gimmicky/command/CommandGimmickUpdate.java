@@ -2,7 +2,7 @@ package net.atlas.gimmicky.command;
 
 import net.atlas.gimmicky.Gimmicky;
 import net.atlas.gimmicky.gimmick.GimmickExtendedEntityProperty;
-import net.atlas.gimmicky.gimmick.PacketSyncGimmick;
+import net.atlas.gimmicky.gimmick.packet.PacketSyncGimmick;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -62,6 +62,7 @@ public class CommandGimmickUpdate extends CommandBase {
         if (!gimmicks.containsKey(gimmick)) gimmick = null;
         if (gimmick != null) gimmickExtendedEntityProperty.setGimmick(gimmick);
         else gimmickExtendedEntityProperty.setGimmick(getRandomGimmick(gimmickExtendedEntityProperty.getRandom()));
+        gimmickExtendedEntityProperty.saveToCustomData(player.getEntityData());
         Gimmicky.proxy.simpleNetworkWrapper.sendToAll(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName(), player.getEntityId()));
         func_152373_a(commandSender, this, "commands.gimmick.success", player.getDisplayName());
     }

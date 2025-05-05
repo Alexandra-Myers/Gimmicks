@@ -10,7 +10,7 @@ import cpw.mods.fml.relauncher.Side;
 import net.atlas.gimmicky.command.CommandGimmickUpdate;
 import net.atlas.gimmicky.event.ForgeEventBusHandler;
 import net.atlas.gimmicky.event.ModEventBusHandler;
-import net.atlas.gimmicky.gimmick.PacketSyncGimmick;
+import net.atlas.gimmicky.gimmick.packet.PacketSyncGimmick;
 import net.minecraftforge.common.MinecraftForge;
 
 import static net.atlas.gimmicky.Gimmicky.MODID;

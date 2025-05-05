@@ -1,9 +1,10 @@
-package net.atlas.gimmicky.gimmick;
+package net.atlas.gimmicky.gimmick.packet;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import net.atlas.gimmicky.gimmick.GimmickExtendedEntityProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.IExtendedEntityProperties;

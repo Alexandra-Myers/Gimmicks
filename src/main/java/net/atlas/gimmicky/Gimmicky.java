@@ -32,6 +32,8 @@ public class Gimmicky {
         gimmicks.put("stepHeightBoost", new StepHeightGimmick());
         gimmicks.put("dupeCraftedItem", new RandomDupeGimmick());
         gimmicks.put("glassCannon", new GlassCannonGimmick());
+        gimmicks.put("invertLavaAndWater", new InvertLavaAndWaterGimmick());
+        gimmicks.put("randomToolOnRespawn", new RandomToolUponRespawnGimmick());
         for (String s : Config.blacklistedEffects) {
             if (s.equals("nothing")) continue;
             gimmicks.remove(s);
