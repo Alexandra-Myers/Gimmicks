@@ -14,7 +14,7 @@ import static net.atlas.gimmicky.Gimmicky.*;
 
 public class GimmickExtendedEntityProperty implements IExtendedEntityProperties {
     private Random random;
-    private String gimmick;
+    private String gimmick = "nothing";
     private String oldGimmick = null;
     private boolean isDirty = false;
     @Override
@@ -78,11 +78,12 @@ public class GimmickExtendedEntityProperty implements IExtendedEntityProperties 
 
     public void finaliseOldGimmick(Event event) {
         if (oldGimmick == null) return;
+        if (oldGimmick.equals(gimmick)) return;
         Gimmick gimmick = gimmicks.get(oldGimmick);
-        if (gimmick.appliesOnEvent(event)) {
+        if (gimmick != null && gimmick.appliesOnEvent(event)) {
             gimmick.finaliseEvent(event);
             oldGimmick = null;
-        }
+        } else if (gimmick == null) oldGimmick = null;
     }
 
     public Gimmick getGimmick() {

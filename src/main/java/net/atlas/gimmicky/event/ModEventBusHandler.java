@@ -22,12 +22,10 @@ public class ModEventBusHandler {
         if (!(gimmickProperties instanceof GimmickExtendedEntityProperty)) return;
         GimmickExtendedEntityProperty gimmickExtendedEntityProperty = (GimmickExtendedEntityProperty) gimmickProperties;
         gimmickExtendedEntityProperty.loadFromCustomData(player.getEntityData());
-        if (Config.persistGimmickAcrossDeath && !"nothing".equalsIgnoreCase(gimmickExtendedEntityProperty.getGimmickName())) {
-            if (gimmickExtendedEntityProperty.isDirty()) {
-                gimmickExtendedEntityProperty.saveToCustomData(player.getEntityData());
-                Gimmicky.proxy.simpleNetworkWrapper.sendToAll(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName(), player.getEntityId()));
-            }
+        if (Config.persistGimmickAcrossDeath) {
+            if (gimmickExtendedEntityProperty.isDirty()) gimmickExtendedEntityProperty.saveToCustomData(player.getEntityData());
             gimmickExtendedEntityProperty.finaliseOldGimmick(event);
+            Gimmicky.proxy.simpleNetworkWrapper.sendToAll(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName(), player.getEntityId()));
             Gimmick gimmick = gimmickExtendedEntityProperty.getGimmick();
             if (gimmick != null && gimmick.appliesOnEvent(event)) gimmick.handleEvent(event);
             return;

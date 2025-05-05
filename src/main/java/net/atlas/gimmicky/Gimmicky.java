@@ -26,7 +26,6 @@ public class Gimmicky {
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
-        gimmicks.put("nothing", new NothingGimmick());
         gimmicks.put("explodeOnDeath", new ExplosionOnDeathGimmick());
         gimmicks.put("teleportRandomlyOnHurt", new TeleportRandomlyOnHurtGimmick());
         gimmicks.put("stepHeightBoost", new StepHeightGimmick());
@@ -35,9 +34,9 @@ public class Gimmicky {
         gimmicks.put("invertLavaAndWater", new InvertLavaAndWaterGimmick());
         gimmicks.put("randomToolOnRespawn", new RandomToolUponRespawnGimmick());
         for (String s : Config.blacklistedEffects) {
-            if (s.equals("nothing")) continue;
             gimmicks.remove(s);
         }
+        if (gimmicks.isEmpty()) gimmicks.put("nothing", new NothingGimmick());
         proxy.preInit(event);
     }
 

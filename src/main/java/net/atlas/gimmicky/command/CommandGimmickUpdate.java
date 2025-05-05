@@ -64,7 +64,7 @@ public class CommandGimmickUpdate extends CommandBase {
         else gimmickExtendedEntityProperty.setGimmick(getRandomGimmick(gimmickExtendedEntityProperty.getRandom()));
         gimmickExtendedEntityProperty.saveToCustomData(player.getEntityData());
         Gimmicky.proxy.simpleNetworkWrapper.sendToAll(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName(), player.getEntityId()));
-        func_152373_a(commandSender, this, "commands.gimmick.success", player.getDisplayName());
+        func_152373_a(commandSender, this, "commands.gimmick.success", player.getDisplayName(), gimmickExtendedEntityProperty.getGimmickName());
     }
 
     @Override

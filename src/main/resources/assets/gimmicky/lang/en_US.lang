@@ -1,2 +1,4 @@
-commands.gimmick.retrieve=The gimmick for %s is %s.
-commands.gimmick.success=Successfully updated gimmick for %s.
+commands.gimmick.retrieve=Current Gimmick for %s: %s
+commands.gimmick.success=Successfully updated gimmick for %s to %s.
+
+item.tomeOfGimmicks.name=Tome of Gimmicks
