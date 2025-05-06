@@ -3,6 +3,7 @@ package net.atlas.gimmicky.gimmick;
 import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class StepHeightGimmick extends GenericGimmick<TickEvent.PlayerTickEvent> {
+
     public StepHeightGimmick() {
         super(TickEvent.PlayerTickEvent.class);
     }

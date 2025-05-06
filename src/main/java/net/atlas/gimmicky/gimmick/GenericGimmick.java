@@ -3,6 +3,7 @@ package net.atlas.gimmicky.gimmick;
 import cpw.mods.fml.common.eventhandler.Event;
 
 public abstract class GenericGimmick<E extends Event> implements Gimmick {
+
     public final Class<E> clazz;
 
     protected GenericGimmick(Class<E> clazz) {
@@ -25,7 +26,9 @@ public abstract class GenericGimmick<E extends Event> implements Gimmick {
         if (!clazz.isInstance(event)) return;
         finaliseTypedEvent(clazz.cast(event));
     }
+
     public abstract void handleTypedEvent(E event);
+
     public void finaliseTypedEvent(E event) {
 
     }

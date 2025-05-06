@@ -1,5 +1,13 @@
 package net.atlas.gimmicky.command;
 
+import static net.atlas.gimmicky.Gimmicky.getRandomGimmick;
+import static net.atlas.gimmicky.Gimmicky.gimmicks;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.List;
+
 import net.atlas.gimmicky.Gimmicky;
 import net.atlas.gimmicky.gimmick.GimmickExtendedEntityProperty;
 import net.atlas.gimmicky.gimmick.packet.PacketSyncGimmick;
@@ -8,14 +16,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.IExtendedEntityProperties;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.List;
-
-import static net.atlas.gimmicky.Gimmicky.getRandomGimmick;
-import static net.atlas.gimmicky.Gimmicky.gimmicks;
 
 public class CommandGimmickUpdate extends CommandBase {
 
@@ -63,8 +63,14 @@ public class CommandGimmickUpdate extends CommandBase {
         if (gimmick != null) gimmickExtendedEntityProperty.setGimmick(gimmick);
         else gimmickExtendedEntityProperty.setGimmick(getRandomGimmick(gimmickExtendedEntityProperty.getRandom()));
         gimmickExtendedEntityProperty.saveToCustomData(player.getEntityData());
-        Gimmicky.proxy.simpleNetworkWrapper.sendToAll(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName(), player.getEntityId()));
-        func_152373_a(commandSender, this, "commands.gimmick.success", player.getDisplayName(), gimmickExtendedEntityProperty.getGimmickName());
+        Gimmicky.proxy.simpleNetworkWrapper
+            .sendToAll(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName(), player.getEntityId()));
+        func_152373_a(
+            commandSender,
+            this,
+            "commands.gimmick.success",
+            player.getDisplayName(),
+            gimmickExtendedEntityProperty.getGimmickName());
     }
 
     @Override
@@ -76,8 +82,12 @@ public class CommandGimmickUpdate extends CommandBase {
         if (doesNotHaveArgument("player", par2ArrayOfStr))
             newArgs.addAll(Arrays.asList(prefixArgumentsWithKey("player", this.getPlayers())));
 
-        if (doesNotHaveArgument("gimmick", par2ArrayOfStr))
-            newArgs.addAll(Arrays.asList(prefixArgumentsWithKey("gimmick", gimmicks.keySet().toArray(new String[0]))));
+        if (doesNotHaveArgument("gimmick", par2ArrayOfStr)) newArgs.addAll(
+            Arrays.asList(
+                prefixArgumentsWithKey(
+                    "gimmick",
+                    gimmicks.keySet()
+                        .toArray(new String[0]))));
 
         if (doesNotHaveArgument("retrieve", par2ArrayOfStr))
             newArgs.addAll(Arrays.asList(prefixArgumentsWithKey("retrieve", "true", "false")));

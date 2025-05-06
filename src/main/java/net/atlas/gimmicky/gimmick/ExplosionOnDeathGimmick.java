@@ -1,17 +1,19 @@
 package net.atlas.gimmicky.gimmick;
 
-import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
+import cpw.mods.fml.common.eventhandler.Event;
+
 public class ExplosionOnDeathGimmick extends GenericGimmick<LivingDeathEvent> {
+
     public ExplosionOnDeathGimmick() {
         super(LivingDeathEvent.class);
     }
 
     @Override
     public boolean appliesOnEvent(Event event) {
-        return super.appliesOnEvent(event) && !((LivingEvent)event).entity.worldObj.isRemote;
+        return super.appliesOnEvent(event) && !((LivingEvent) event).entity.worldObj.isRemote;
     }
 
     @Override

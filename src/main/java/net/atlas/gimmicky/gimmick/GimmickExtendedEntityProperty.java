@@ -1,6 +1,9 @@
 package net.atlas.gimmicky.gimmick;
 
-import cpw.mods.fml.common.eventhandler.Event;
+import static net.atlas.gimmicky.Gimmicky.*;
+
+import java.util.Random;
+
 import net.atlas.gimmicky.Gimmicky;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,15 +11,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
-import java.util.Random;
-
-import static net.atlas.gimmicky.Gimmicky.*;
+import cpw.mods.fml.common.eventhandler.Event;
 
 public class GimmickExtendedEntityProperty implements IExtendedEntityProperties {
+
     private Random random;
     private String gimmick = "nothing";
     private String oldGimmick = null;
     private boolean isDirty = false;
+
     @Override
     public void saveNBTData(NBTTagCompound compound) {
         NBTTagCompound customData = compound.getCompoundTag("ForgeData");
@@ -30,7 +33,8 @@ public class GimmickExtendedEntityProperty implements IExtendedEntityProperties 
         if (persistedTagCompound == null) persistedTagCompound = new NBTTagCompound();
         if (oldGimmick != null) persistedTagCompound.setString(Gimmicky.GIMMICK_TAG_NAME + "O", oldGimmick);
         if (!gimmick.isEmpty()) persistedTagCompound.setString(Gimmicky.GIMMICK_TAG_NAME, gimmick);
-        else if (persistedTagCompound.hasKey(Gimmicky.GIMMICK_TAG_NAME)) persistedTagCompound.removeTag(GIMMICK_TAG_NAME);
+        else if (persistedTagCompound.hasKey(Gimmicky.GIMMICK_TAG_NAME))
+            persistedTagCompound.removeTag(GIMMICK_TAG_NAME);
         customData.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistedTagCompound);
     }
 
@@ -44,7 +48,8 @@ public class GimmickExtendedEntityProperty implements IExtendedEntityProperties 
     public void loadFromCustomData(NBTTagCompound customData) {
         NBTTagCompound persistedTagCompound = customData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
         if (persistedTagCompound == null) persistedTagCompound = new NBTTagCompound();
-        if (persistedTagCompound.hasKey(Gimmicky.GIMMICK_TAG_NAME + "O")) oldGimmick = persistedTagCompound.getString(Gimmicky.GIMMICK_TAG_NAME + "O");
+        if (persistedTagCompound.hasKey(Gimmicky.GIMMICK_TAG_NAME + "O"))
+            oldGimmick = persistedTagCompound.getString(Gimmicky.GIMMICK_TAG_NAME + "O");
         if (!persistedTagCompound.hasKey(Gimmicky.GIMMICK_TAG_NAME)) {
             gimmick = getRandomGimmick(random);
             isDirty = true;

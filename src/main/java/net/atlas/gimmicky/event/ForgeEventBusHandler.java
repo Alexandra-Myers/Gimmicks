@@ -1,6 +1,5 @@
 package net.atlas.gimmicky.event;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.atlas.gimmicky.gimmick.Gimmick;
 import net.atlas.gimmicky.gimmick.GimmickExtendedEntityProperty;
 import net.minecraft.block.Block;
@@ -18,25 +17,32 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 public class ForgeEventBusHandler {
+
     @SubscribeEvent
     public void playerCreation(EntityEvent.EntityConstructing event) {
         if (!(event.entity instanceof EntityPlayer)) return;
         EntityPlayer player = (EntityPlayer) event.entity;
         player.registerExtendedProperties("gimmicky:gimmick", new GimmickExtendedEntityProperty());
     }
+
     @SubscribeEvent
     public void handleLivingDeath(LivingDeathEvent event) {
         handleEntityEvent(event);
     }
+
     @SubscribeEvent
     public void handleLivingHurt(LivingHurtEvent event) {
         handleEntityEvent(event);
     }
+
     @SubscribeEvent
     public void handleItemUse(PlayerInteractEvent event) {
         ItemStack itemStackIn = event.entityPlayer.inventory.getCurrentItem();
-        if (!event.action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) && itemStackIn != null && itemStackIn.getItem() instanceof ItemArmor) {
+        if (!event.action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) && itemStackIn != null
+            && itemStackIn.getItem() instanceof ItemArmor) {
             int i = EntityLiving.getArmorPosition(itemStackIn) - 1;
             ItemStack itemstack1 = event.entityPlayer.getCurrentArmor(i);
 
@@ -49,6 +55,7 @@ public class ForgeEventBusHandler {
         }
         handleEntityEvent(event);
     }
+
     public void handleEntityEvent(EntityEvent event) {
         if (!(event.entity instanceof EntityPlayer)) return;
         IExtendedEntityProperties gimmickProperties = event.entity.getExtendedProperties("gimmicky:gimmick");
@@ -61,7 +68,7 @@ public class ForgeEventBusHandler {
     // Clone of Enderman Teleport
     public static boolean teleportTo(EntityLivingBase livingBase, double x, double y, double z) {
         EnderTeleportEvent event = new EnderTeleportEvent(livingBase, x, y, z, 0);
-        if (MinecraftForge.EVENT_BUS.post(event)){
+        if (MinecraftForge.EVENT_BUS.post(event)) {
             return false;
         }
         double oriX = livingBase.posX;
@@ -81,7 +88,8 @@ public class ForgeEventBusHandler {
             while (!flag1 && j > 0) {
                 Block block = livingBase.worldObj.getBlock(i, j - 1, k);
 
-                if (block.getMaterial().blocksMovement()) {
+                if (block.getMaterial()
+                    .blocksMovement()) {
                     flag1 = true;
                 } else {
                     --livingBase.posY;
@@ -93,7 +101,8 @@ public class ForgeEventBusHandler {
                 livingBase.mountEntity(null);
                 livingBase.setPositionAndUpdate(livingBase.posX, livingBase.posY, livingBase.posZ);
 
-                if (livingBase.worldObj.getCollidingBoundingBoxes(livingBase, livingBase.boundingBox).isEmpty() && !livingBase.worldObj.isAnyLiquid(livingBase.boundingBox)) {
+                if (livingBase.worldObj.getCollidingBoundingBoxes(livingBase, livingBase.boundingBox)
+                    .isEmpty() && !livingBase.worldObj.isAnyLiquid(livingBase.boundingBox)) {
                     flag = true;
                 }
             }

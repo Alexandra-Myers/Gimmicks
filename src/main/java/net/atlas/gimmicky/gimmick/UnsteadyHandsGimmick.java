@@ -1,18 +1,22 @@
 package net.atlas.gimmicky.gimmick;
 
-import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTNT;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
+import cpw.mods.fml.common.eventhandler.Event;
+
 public class UnsteadyHandsGimmick extends GenericGimmick<PlayerInteractEvent> {
+
     public UnsteadyHandsGimmick() {
         super(PlayerInteractEvent.class);
     }
 
     @Override
     public boolean appliesOnEvent(Event event) {
-        return super.appliesOnEvent(event) && ((PlayerInteractEvent)event).action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) && !((PlayerInteractEvent)event).world.isRemote;
+        return super.appliesOnEvent(event)
+            && ((PlayerInteractEvent) event).action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
+            && !((PlayerInteractEvent) event).world.isRemote;
     }
 
     @Override

@@ -1,17 +1,19 @@
 package net.atlas.gimmicky.gimmick.packet;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import io.netty.buffer.ByteBuf;
+import java.nio.charset.StandardCharsets;
+
 import net.atlas.gimmicky.gimmick.GimmickExtendedEntityProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
-import java.nio.charset.StandardCharsets;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import io.netty.buffer.ByteBuf;
 
 public class PacketSyncGimmick implements IMessage {
+
     private String gimmick;
     private int entityID;
 
@@ -26,7 +28,10 @@ public class PacketSyncGimmick implements IMessage {
     public void fromBytes(ByteBuf buf) {
         entityID = buf.readInt();
         int len = buf.readInt();
-        this.gimmick = new String(buf.readBytes(len).array(), StandardCharsets.UTF_8);
+        this.gimmick = new String(
+            buf.readBytes(len)
+                .array(),
+            StandardCharsets.UTF_8);
     }
 
     @Override
@@ -38,14 +43,16 @@ public class PacketSyncGimmick implements IMessage {
     }
 
     public static class Handler implements IMessageHandler<PacketSyncGimmick, IMessage> {
+
         @Override
         public IMessage onMessage(PacketSyncGimmick message, MessageContext ctx) {
-            Minecraft.getMinecraft().func_152344_a(() -> {
-                Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(message.entityID);
-                IExtendedEntityProperties gimmickProperties = entity.getExtendedProperties("gimmicky:gimmick");
-                if (!(gimmickProperties instanceof GimmickExtendedEntityProperty)) return;
-                ((GimmickExtendedEntityProperty) gimmickProperties).setGimmick(message.gimmick);
-            });
+            Minecraft.getMinecraft()
+                .func_152344_a(() -> {
+                    Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(message.entityID);
+                    IExtendedEntityProperties gimmickProperties = entity.getExtendedProperties("gimmicky:gimmick");
+                    if (!(gimmickProperties instanceof GimmickExtendedEntityProperty)) return;
+                    ((GimmickExtendedEntityProperty) gimmickProperties).setGimmick(message.gimmick);
+                });
             return null;
         }
     }

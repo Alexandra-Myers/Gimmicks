@@ -1,19 +1,22 @@
 package net.atlas.gimmicky;
 
+import java.util.*;
+
+import net.atlas.gimmicky.gimmick.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import net.atlas.gimmicky.gimmick.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.*;
 
 @Mod(modid = Gimmicky.MODID, version = Tags.VERSION, name = "Gimmicky", acceptedMinecraftVersions = "[1.7.10]")
 public class Gimmicky {
+
     public static final Map<String, Gimmick> gimmicks = new HashMap<>();
     public static final String MODID = "gimmicky";
     public static final String GIMMICK_TAG_NAME = "PlayerGimmick";
@@ -59,6 +62,7 @@ public class Gimmicky {
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
     }
+
     public static String getRandomGimmick(Random random) {
         List<String> gimmickNames = new ArrayList<>(gimmicks.keySet());
         return gimmickNames.get(random.nextInt(gimmickNames.size()));
