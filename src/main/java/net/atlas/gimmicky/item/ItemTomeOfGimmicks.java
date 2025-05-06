@@ -4,7 +4,6 @@ import net.atlas.gimmicky.Gimmicky;
 import net.atlas.gimmicky.gimmick.GimmickExtendedEntityProperty;
 import net.atlas.gimmicky.gimmick.packet.PacketSyncGimmick;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
