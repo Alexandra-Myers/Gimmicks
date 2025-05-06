@@ -26,13 +26,15 @@ public class Gimmicky {
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
-        gimmicks.put("explodeOnDeath", new ExplosionOnDeathGimmick());
-        gimmicks.put("teleportRandomlyOnHurt", new TeleportRandomlyOnHurtGimmick());
-        gimmicks.put("stepHeightBoost", new StepHeightGimmick());
-        gimmicks.put("dupeCraftedItem", new RandomDupeGimmick());
-        gimmicks.put("glassCannon", new GlassCannonGimmick());
-        gimmicks.put("invertLavaAndWater", new InvertLavaAndWaterGimmick());
-        gimmicks.put("randomToolOnRespawn", new RandomToolUponRespawnGimmick());
+        gimmicks.put("creeperInstincts", new ExplosionOnDeathGimmick());
+        gimmicks.put("endermanInstincts", new TeleportRandomlyOnHurtGimmick());
+        gimmicks.put("acrobat", new StepHeightGimmick());
+        gimmicks.put("efficientCraftsman", new RandomDupeGimmick());
+        gimmicks.put("noPainNoGain", new GlassCannonGimmick());
+        gimmicks.put("aquaphobia", new InvertLavaAndWaterGimmick());
+        gimmicks.put("giftFromAbove", new RandomToolUponRespawnGimmick());
+        gimmicks.put("unsteadyHands", new UnsteadyHandsGimmick());
+        gimmicks.put("surefooted", new KnockbackResistanceBoostGimmick());
         for (String s : Config.blacklistedEffects) {
             gimmicks.remove(s);
         }

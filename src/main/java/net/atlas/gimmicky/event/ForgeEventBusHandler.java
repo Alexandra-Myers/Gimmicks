@@ -48,6 +48,7 @@ public class ForgeEventBusHandler {
                 itemstack1.stackSize = 0;
             }
         }
+        handleEntityEvent(event);
     }
     public void handleEntityEvent(EntityEvent event) {
         if (!(event.entity instanceof EntityPlayer)) return;

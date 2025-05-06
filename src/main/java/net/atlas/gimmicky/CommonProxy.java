@@ -33,7 +33,7 @@ public class CommonProxy {
         simpleNetworkWrapper = new SimpleNetworkWrapper(MODID);
         simpleNetworkWrapper.registerMessage(PacketSyncGimmick.Handler.class, PacketSyncGimmick.class, 0, Side.CLIENT);
         tomeOfGimmicks = new ItemTomeOfGimmicks();
-        GameRegistry.registerItem(tomeOfGimmicks, "gimmicky:tome_of_gimmicks");
+        GameRegistry.registerItem(tomeOfGimmicks, "tome_of_gimmicks");
         CraftingManager.getInstance().addRecipe(new ItemStack(tomeOfGimmicks, 1), " # ", "XBX", " # ", '#', Items.blaze_rod, 'X', Items.ghast_tear, 'B', Items.book);
     }
 

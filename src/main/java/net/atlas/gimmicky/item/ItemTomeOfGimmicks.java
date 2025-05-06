@@ -21,25 +21,8 @@ public class ItemTomeOfGimmicks extends Item {
         this.setUnlocalizedName("tomeOfGimmicks");
         this.setTextureName("gimmicky:tome_of_gimmicks");
         this.setMaxStackSize(1);
-        this.setMaxDamage(3);
+        this.setMaxDamage(4);
         this.setCreativeTab(CreativeTabs.tabMisc);
-    }
-
-    @Override
-    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target) {
-        if (target instanceof EntityPlayer) {
-            EntityPlayer otherPlayer = (EntityPlayer) target;
-            IExtendedEntityProperties gimmickProperties = player.getExtendedProperties("gimmicky:gimmick");
-            IExtendedEntityProperties targetGimmickProperties = otherPlayer.getExtendedProperties("gimmicky:gimmick");
-            if (!(gimmickProperties instanceof GimmickExtendedEntityProperty && targetGimmickProperties instanceof GimmickExtendedEntityProperty)) return false;
-            GimmickExtendedEntityProperty gimmickExtendedEntityProperty = (GimmickExtendedEntityProperty) gimmickProperties;
-            gimmickExtendedEntityProperty.setGimmick(((GimmickExtendedEntityProperty) targetGimmickProperties).getGimmickName());
-            gimmickExtendedEntityProperty.saveToCustomData(player.getEntityData());
-            Gimmicky.proxy.simpleNetworkWrapper.sendToAll(new PacketSyncGimmick(gimmickExtendedEntityProperty.getGimmickName(), player.getEntityId()));
-            if (!player.capabilities.isCreativeMode) stack.damageItem(4, target);
-            return true;
-        }
-        return false;
     }
 
     @Override
