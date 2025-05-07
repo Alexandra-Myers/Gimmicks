@@ -16,7 +16,7 @@ public class InvertLavaAndWaterGimmick extends GenericGimmick<TickEvent.PlayerTi
     public void handleTypedEvent(TickEvent.PlayerTickEvent event) {
         if (!event.player.isImmuneToFire()) ObfuscationReflectionHelper
             .setPrivateValue(Entity.class, event.player, true, "isImmuneToFire", "field_70178_ae");
-        if (event.player.isInWater()) event.player.attackEntityFrom(DamageSource.drown, 3.0F);
+        if (event.player.isInWater()) event.player.attackEntityFrom(DamageSource.drown, 1.0F);
         else if (event.player.isWet() && event.player.getCurrentArmor(3) == null)
             event.player.attackEntityFrom(DamageSource.drown, 1.0F);
     }
