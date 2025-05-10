@@ -38,11 +38,11 @@ public class Gimmicky {
         gimmicks.put("giftFromAbove", new RandomToolUponRespawnGimmick());
         gimmicks.put("unsteadyHands", new UnsteadyHandsGimmick());
         gimmicks.put("surefooted", new KnockbackResistanceBoostGimmick());
+        proxy.preInit(event);
         for (String s : Config.blacklistedEffects) {
             gimmicks.remove(s);
         }
         if (gimmicks.isEmpty()) gimmicks.put("nothing", new NothingGimmick());
-        proxy.preInit(event);
     }
 
     @Mod.EventHandler
